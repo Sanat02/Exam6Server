@@ -29,23 +29,44 @@ public class Lesson44Server extends BasicServer {
 
     private final static Configuration freemarker = initFreeMarker();
     private Month month = new Month();
+    private Day day=null;
 
 
     public Lesson44Server(String host, int port) throws IOException {
         super(host, port);
         registerGet("/schedule", this::getSchedule);
         registerGet("/addTask", this::addTask);
-        registerPost("/createTask", this::createTask);
+        registerPost("/addTask", this::handleRegisterPost);
+
 
     }
 
-    private void createTask(HttpExchange exchange) {
+
+    private void handleRegisterPost(HttpExchange exchange) {
         String raw = getBody(exchange);
         Map<String, String> parsed = parseUrlEncoded(raw, "&");
         System.out.println(parsed);
-        String params = exchange.getRequestURI().getQuery();
-        String date = params.split("=")[1];
-        renderTemplate(exchange, "createTask.html", new Message(date));
+
+        String name = parsed.get("name");
+        String description = parsed.get("description");
+        String priority = parsed.get("priority");
+        System.out.println(name);
+        System.out.println(description);
+        System.out.println(priority);
+        Pacient newPacient=new Pacient();
+        newPacient.setFIO(name);
+        newPacient.setDescription(description);
+        newPacient.setType(Integer.parseInt(priority));
+        for(int i=0;i<month.getDays().size();i++)
+        {
+            if(month.getDays().get(i).getDate()== day.getDate())
+            {
+               month.getDays().get(i).addPacient(newPacient);
+            }
+        }
+
+        renderTemplate(exchange,"registerS.html",newPacient);
+
     }
 
     private void addTask(HttpExchange exchange) {
@@ -53,10 +74,10 @@ public class Lesson44Server extends BasicServer {
         Map<String, String> params = parseUrlEncoded(queryParams, "&");
         String date = params.getOrDefault("day", "null");
         int dateInt = Integer.parseInt(date);
-        Day day = null;
+
         for (int i = 0; i < month.getDays().size(); i++) {
             if (month.getDays().get(i).getDate() == dateInt) {
-                day=month.getDays().get(i);
+                day = month.getDays().get(i);
             }
         }
 

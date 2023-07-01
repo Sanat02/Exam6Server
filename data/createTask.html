@@ -42,5 +42,29 @@
 
 </#list>
 
+<form action="/addTask" method="post">
+    <fieldset>
+        <div class="form-element">
+            <label for="name">Task name</label>
+            <input type="text" name="name" id="name" placeholder="Enter task name" required autofocus>
+        </div>
+
+        <div class="form-element">
+            <label for="description">description</label>
+            <input type="text" name="description" id="description" placeholder="Enter description" required autofocus>
+        </div>
+
+        <div class="form-element">
+            <label for="priority">priority</label>
+            <input type="text" name="priority" id="priority" placeholder="Enter priority" required autofocus>
+        </div>
+        <div class="form-element">
+            <button class="submitbtn" type="submit">Register</button>
+        </div>
+    </fieldset>
+</form>
+
+
+
 </body>
 </html>

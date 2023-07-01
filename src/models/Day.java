@@ -3,6 +3,7 @@ package models;
 import exam6.Pacient;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Day {
@@ -65,6 +66,7 @@ public class Day {
         for (int i = 1; i < 5; i++) {
             pacients.add(new Pacient());
         }
+        pacients.sort(Comparator.comparing(Pacient::getHour));
         return pacients;
     }
 
@@ -75,4 +77,9 @@ public class Day {
     public void setPacients(List<Pacient> pacients) {
         this.pacients = pacients;
     }
+    public void addPacient(Pacient pacient)
+    {
+        pacients.add(pacient);
+    }
+
 }
