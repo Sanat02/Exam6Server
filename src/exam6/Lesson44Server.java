@@ -35,10 +35,16 @@ public class Lesson44Server extends BasicServer {
         super(host, port);
         registerGet("/schedule", this::getSchedule);
         registerGet("/addTask", this::addTask);
-        registerPost("/addTask", this::handleRegisterPost);
         registerGet("/deleteTask", this::deleteTask);
+        registerPost("/add",this::handleRegisterPost);
+        registerGet("/add",this::addHandler);
 
 
+    }
+
+    private void addHandler(HttpExchange exchange) {
+        Path path = makeFilePath("add.html");
+        sendFile(exchange, path, ContentType.TEXT_HTML);
     }
 
     private void deleteTask(HttpExchange exchange) {
@@ -51,6 +57,7 @@ public class Lesson44Server extends BasicServer {
             if(day.getPacients().get(i).getFIO().equals(name))
             {
                 day.getPacients().remove(i);
+                day.setSize(day.getPacients().size());
                 break;
 
             }

@@ -12,7 +12,7 @@ public class Day {
     private int date;
     private int size;
     private boolean today;
-    private List<Task> tasks = new ArrayList<>();
+
 
     public Day(String month, int date, boolean today) {
         this.month = month;
@@ -54,13 +54,6 @@ public class Day {
         this.today = today;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
     private List<Pacient> fillPacients() {
 
         for (int i = 1; i < 5; i++) {
@@ -81,6 +74,7 @@ public class Day {
     {
         pacients.sort(Comparator.comparing(Pacient::getHour));
         pacients.add(pacient);
+        this.size=pacients.size();
     }
 
 }
