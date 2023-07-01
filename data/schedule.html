@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .day {
+            margin: 5px;
+            /* Default background color */
+            background-color: green;
+        }
+
+        .patient {
+            background-color: white;
+            margin: 5px;
+        }
+
+        .current-day {
+            /* Background color for current day */
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+
+<div>
+    Today is ${dayOfMonth} of July
+    <#assign count=1>
+    <#list listP as patientGroup>
+    <div class="day<#if count == dayOfMonth> current-day</#if>">Day ${count} July
+        <div>Quantity:${size}</div>
+        <#list patientGroup as patient>
+        <div class="patient">
+            <div>name: ${patient.FIO}</div>
+            <div>name: ${patient.hour}</div>
+            <div>type: ${patient.type}</div>
+        </div>
+    </#list>
+</div>
+<#assign count = count + 1>
+</#list>
+</div>
+
+</body>
+</html>

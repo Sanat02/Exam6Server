@@ -5,29 +5,57 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import models.Message;
+import models.Month;
 import server.BasicServer;
 
+import server.ContentType;
 import server.ResponseCodes;
+import server.Utils;
 
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.file.Path;
+import java.util.Map;
 
+import static server.Utils.parseUrlEncoded;
 
 
 public class Lesson44Server extends BasicServer {
 
     private final static Configuration freemarker = initFreeMarker();
+    private Month month=new Month();
+
 
     public Lesson44Server(String host, int port) throws IOException {
         super(host, port);
         registerGet("/schedule", this::getSchedule);
+        registerGet("/addTask", this::addTask);
+        registerPost("/createTask", this::createTask);
 
+    }
+    private void createTask(HttpExchange exchange) {
+        String raw = getBody(exchange);
+        Map<String, String> parsed = parseUrlEncoded(raw, "&");
+        System.out.println(parsed);
+        String params = exchange.getRequestURI().getQuery();
+        String date = params.split("=")[1];
+        renderTemplate(exchange, "createTask.html", new Message(date));
+    }
+
+    private void addTask(HttpExchange exchange) {
+        String queryParams = getQueryParams(exchange);
+        Map<String, String> params = parseUrlEncoded(queryParams, "&");
+        String date = params.getOrDefault("date", "null");
+        renderTemplate(exchange, "createTask.html", new Message(date));
     }
 
     private void getSchedule(HttpExchange exchange) {
+
+       renderTemplate(exchange,"schedule.html",month);
 
     }
 
