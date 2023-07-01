@@ -5,15 +5,27 @@
     <title>Title</title>
     <style>
         .green {
+            display:flex;
+            flex-direction:column;
             background-color: green;
             color: white;
-             margin-bottom:5px;
+            margin-bottom: 5px;
         }
 
         .red {
+            display:flex;
+            flex-direction:column;
             background-color: red;
             color: white;
-            margin-bottom:5px;
+            margin-bottom: 5px;
+        }
+
+        .delete-button {
+            padding:5px;
+            margin-top: 6px;
+            background-color: black;
+            color: white;
+            width:40px;
         }
     </style>
 </head>
@@ -21,25 +33,26 @@
 
 <div>DAY ${date}</div>
 <h>Patients</h>
-<div>QUANTITY:${size}</div>
+<div>QUANTITY: ${size}</div>
 
 <#list pacients as pacient>
-  <#if pacient.type==2>
-     <div class="red">
+<#if pacient.type == 2>
+<div class="red">
     <div>name: ${pacient.FIO}</div>
     <div>hour: ${pacient.hour}</div>
     <div>type: ${pacient.type}</div>
-         <div>description: ${pacient.description}</div>
-     </div>
+    <div>description: ${pacient.description}</div>
+    <a href="/deleteTask?FIO=${pacient.FIO}" class="delete-button">Delete</a>
+</div>
 <#else>
 <div class="green">
     <div>name: ${pacient.FIO}</div>
     <div>hour: ${pacient.hour}</div>
     <div>type: ${pacient.type}</div>
     <div>description: ${pacient.description}</div>
+    <a href="/deleteTask?FIO=${pacient.FIO}" class="delete-button">Delete</a>
 </div>
 </#if>
-
 </#list>
 
 <form action="/addTask" method="post">
@@ -50,21 +63,20 @@
         </div>
 
         <div class="form-element">
-            <label for="description">description</label>
+            <label for="description">Description</label>
             <input type="text" name="description" id="description" placeholder="Enter description" required autofocus>
         </div>
 
         <div class="form-element">
-            <label for="priority">priority</label>
+            <label for="priority">Priority</label>
             <input type="text" name="priority" id="priority" placeholder="Enter priority" required autofocus>
         </div>
+
         <div class="form-element">
             <button class="submitbtn" type="submit">Register</button>
         </div>
     </fieldset>
 </form>
-
-
 
 </body>
 </html>

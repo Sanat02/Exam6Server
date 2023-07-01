@@ -11,6 +11,7 @@ import server.BasicServer;
 
 import server.ContentType;
 import server.ResponseCodes;
+import server.Utils;
 
 
 import java.io.ByteArrayOutputStream;
@@ -35,7 +36,27 @@ public class Lesson44Server extends BasicServer {
         registerGet("/schedule", this::getSchedule);
         registerGet("/addTask", this::addTask);
         registerPost("/addTask", this::handleRegisterPost);
+        registerGet("/deleteTask", this::deleteTask);
 
+
+    }
+
+    private void deleteTask(HttpExchange exchange) {
+        String queryParams = getQueryParams(exchange);
+        Map<String, String> params = Utils.parseUrlEncoded(queryParams, "&");
+        String name = params.getOrDefault("FIO", "null");
+        System.out.println(name);
+        for(int i=0;i<day.getPacients().size();i++)
+        {
+            if(day.getPacients().get(i).getFIO().equals(name))
+            {
+                day.getPacients().remove(i);
+                break;
+
+            }
+        }
+        Path path = makeFilePath("deleted.html");
+        sendFile(exchange, path, ContentType.TEXT_HTML);
 
     }
 
@@ -50,7 +71,7 @@ public class Lesson44Server extends BasicServer {
         System.out.println(name);
         System.out.println(description);
         System.out.println(priority);
-        if (hasNumber(name) == 1||isValid(priority)==1) {
+        if (hasNumber(name) == 1 || isValid(priority) == 1) {
             Path path = makeFilePath("invalid.html");
             sendFile(exchange, path, ContentType.TEXT_HTML);
         } else {
@@ -63,7 +84,7 @@ public class Lesson44Server extends BasicServer {
                     month.getDays().get(i).addPacient(newPacient);
                 }
             }
-            redirect303(exchange,"/schedule");
+            redirect303(exchange, "/schedule");
 
         }
 
@@ -133,14 +154,13 @@ public class Lesson44Server extends BasicServer {
         }
         return 0;
     }
+
     public static int isValid(String input) {
-        if(input.equals("1")|| input.equals("2"))
-        {
+        if (input.equals("1") || input.equals("2")) {
             return 0;
         }
         return 1;
     }
-
 
 
 }
