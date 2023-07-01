@@ -79,6 +79,7 @@ public class Day {
     }
     public void addPacient(Pacient pacient)
     {
+        pacients.sort(Comparator.comparing(Pacient::getHour));
         pacients.add(pacient);
     }
 

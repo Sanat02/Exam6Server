@@ -6,13 +6,11 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import models.Day;
-import models.Message;
 import models.Month;
 import server.BasicServer;
 
 import server.ContentType;
 import server.ResponseCodes;
-import server.Utils;
 
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +27,7 @@ public class Lesson44Server extends BasicServer {
 
     private final static Configuration freemarker = initFreeMarker();
     private Month month = new Month();
-    private Day day=null;
+    private Day day = null;
 
 
     public Lesson44Server(String host, int port) throws IOException {
@@ -46,26 +44,28 @@ public class Lesson44Server extends BasicServer {
         String raw = getBody(exchange);
         Map<String, String> parsed = parseUrlEncoded(raw, "&");
         System.out.println(parsed);
-
         String name = parsed.get("name");
         String description = parsed.get("description");
         String priority = parsed.get("priority");
         System.out.println(name);
         System.out.println(description);
         System.out.println(priority);
-        Pacient newPacient=new Pacient();
-        newPacient.setFIO(name);
-        newPacient.setDescription(description);
-        newPacient.setType(Integer.parseInt(priority));
-        for(int i=0;i<month.getDays().size();i++)
-        {
-            if(month.getDays().get(i).getDate()== day.getDate())
-            {
-               month.getDays().get(i).addPacient(newPacient);
+        if (hasNumber(name) == 1||isValid(priority)==1) {
+            Path path = makeFilePath("invalid.html");
+            sendFile(exchange, path, ContentType.TEXT_HTML);
+        } else {
+            Pacient newPacient = new Pacient();
+            newPacient.setFIO(name);
+            newPacient.setDescription(description);
+            newPacient.setType(Integer.parseInt(priority));
+            for (int i = 0; i < month.getDays().size(); i++) {
+                if (month.getDays().get(i).getDate() == day.getDate()) {
+                    month.getDays().get(i).addPacient(newPacient);
+                }
             }
-        }
+            redirect303(exchange,"/schedule");
 
-        renderTemplate(exchange,"registerS.html",newPacient);
+        }
 
     }
 
@@ -124,6 +124,23 @@ public class Lesson44Server extends BasicServer {
             e.printStackTrace();
         }
     }
+
+    public static int hasNumber(String input) {
+        for (char c : input.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return 1;
+            }
+        }
+        return 0;
+    }
+    public static int isValid(String input) {
+        if(input.equals("1")|| input.equals("2"))
+        {
+            return 0;
+        }
+        return 1;
+    }
+
 
 
 }
