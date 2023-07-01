@@ -36,8 +36,8 @@ public class Lesson44Server extends BasicServer {
         registerGet("/schedule", this::getSchedule);
         registerGet("/addTask", this::addTask);
         registerGet("/deleteTask", this::deleteTask);
-        registerPost("/add",this::handleRegisterPost);
-        registerGet("/add",this::addHandler);
+        registerPost("/add", this::handleRegisterPost);
+        registerGet("/add", this::addHandler);
 
 
     }
@@ -52,10 +52,8 @@ public class Lesson44Server extends BasicServer {
         Map<String, String> params = Utils.parseUrlEncoded(queryParams, "&");
         String name = params.getOrDefault("FIO", "null");
         System.out.println(name);
-        for(int i=0;i<day.getPacients().size();i++)
-        {
-            if(day.getPacients().get(i).getFIO().equals(name))
-            {
+        for (int i = 0; i < day.getPacients().size(); i++) {
+            if (day.getPacients().get(i).getFIO().equals(name)) {
                 day.getPacients().remove(i);
                 day.setSize(day.getPacients().size());
                 break;
@@ -71,13 +69,9 @@ public class Lesson44Server extends BasicServer {
     private void handleRegisterPost(HttpExchange exchange) {
         String raw = getBody(exchange);
         Map<String, String> parsed = parseUrlEncoded(raw, "&");
-        System.out.println(parsed);
         String name = parsed.get("name");
         String description = parsed.get("description");
         String priority = parsed.get("priority");
-        System.out.println(name);
-        System.out.println(description);
-        System.out.println(priority);
         if (hasNumber(name) == 1 || isValid(priority) == 1) {
             Path path = makeFilePath("invalid.html");
             sendFile(exchange, path, ContentType.TEXT_HTML);
@@ -109,8 +103,6 @@ public class Lesson44Server extends BasicServer {
             }
         }
 
-        System.out.println(day.getPacients().size());
-        System.out.println(day.getDate());
         renderTemplate(exchange, "createTask.html", day);
     }
 
