@@ -19,25 +19,34 @@
             /* Background color for current day */
             background-color: red;
         }
+
+        .cyan {
+            /* Background color for patient type 1 */
+            background-color: cyan;
+        }
+        .link{
+        color:white;
+
+        }
     </style>
 </head>
 <body>
 
 <div>
     Today is ${dayOfMonth} of July
-    <#assign count=1>
-    <#list listP as patientGroup>
-    <div class="day<#if count == dayOfMonth> current-day</#if>">Day ${count} July
-        <div>Quantity:${size}</div>
-        <#list patientGroup as patient>
-        <div class="patient">
+    <#list days as day>
+    <div class="day<#if day.date == dayOfMonth> current-day</#if>">
+        Day ${day.date} July ${day.month}
+        <div>Quantity: ${day.size}</div>
+        <#list day.pacients as patient>
+        <div class="patient<#if patient.type == 1> cyan</#if>">
             <div>name: ${patient.FIO}</div>
-            <div>name: ${patient.hour}</div>
+            <div>hour: ${patient.hour}</div>
             <div>type: ${patient.type}</div>
         </div>
     </#list>
+    <a class="link" href="addTask?day=${day.date}"><h2>add patient</h2></a>
 </div>
-<#assign count = count + 1>
 </#list>
 </div>
 

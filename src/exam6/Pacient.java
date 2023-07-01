@@ -11,11 +11,21 @@ public class Pacient {
     private String FIO;
     private int type;
     private String hour;
+    private String description;
 
     public Pacient() {
         this.FIO =Generator.makeName() ;
         this.type=generateRandomNumber();
         this.hour=generateRandomHourString();
+        this.description=Generator.makeDescription();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getFIO() {

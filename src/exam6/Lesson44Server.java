@@ -5,6 +5,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import models.Day;
 import models.Message;
 import models.Month;
 import server.BasicServer;
@@ -27,7 +28,7 @@ import static server.Utils.parseUrlEncoded;
 public class Lesson44Server extends BasicServer {
 
     private final static Configuration freemarker = initFreeMarker();
-    private Month month=new Month();
+    private Month month = new Month();
 
 
     public Lesson44Server(String host, int port) throws IOException {
@@ -37,6 +38,7 @@ public class Lesson44Server extends BasicServer {
         registerPost("/createTask", this::createTask);
 
     }
+
     private void createTask(HttpExchange exchange) {
         String raw = getBody(exchange);
         Map<String, String> parsed = parseUrlEncoded(raw, "&");
@@ -49,13 +51,23 @@ public class Lesson44Server extends BasicServer {
     private void addTask(HttpExchange exchange) {
         String queryParams = getQueryParams(exchange);
         Map<String, String> params = parseUrlEncoded(queryParams, "&");
-        String date = params.getOrDefault("date", "null");
-        renderTemplate(exchange, "createTask.html", new Message(date));
+        String date = params.getOrDefault("day", "null");
+        int dateInt = Integer.parseInt(date);
+        Day day = null;
+        for (int i = 0; i < month.getDays().size(); i++) {
+            if (month.getDays().get(i).getDate() == dateInt) {
+                day=month.getDays().get(i);
+            }
+        }
+
+        System.out.println(day.getPacients().size());
+        System.out.println(day.getDate());
+        renderTemplate(exchange, "createTask.html", day);
     }
 
     private void getSchedule(HttpExchange exchange) {
 
-       renderTemplate(exchange,"schedule.html",month);
+        renderTemplate(exchange, "schedule.html", month);
 
     }
 

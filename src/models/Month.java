@@ -11,7 +11,7 @@ public class Month {
 
     private List<Day> days = new ArrayList<>();
     private Pacient pacient=new Pacient();
-    private List<List<Pacient>> listP=new ArrayList<>();
+    private List<Month> listP=new ArrayList<>();
     LocalDate currentDate = LocalDate.now();
     int dayOfMonth = currentDate.getDayOfMonth();
     private int size=5;
@@ -26,9 +26,6 @@ public class Month {
 
     public Month() {
         fillMonth();
-        fillPacients2();
-        pacient.setFIO("Gulya");
-
     }
 
     public int getDayOfMonth() {
@@ -39,9 +36,7 @@ public class Month {
         this.dayOfMonth = dayOfMonth;
     }
 
-    public List<List<Pacient>> getListP() {
-        return listP;
-    }
+
 
     public List<Day> getDays() {
         return days;
@@ -68,20 +63,11 @@ public class Month {
 
             days.add(day);
 
+
         }
     }
-    private List<Pacient> fillPacients() {
-       List<Pacient> pacients = new ArrayList<>();
-        for (int i = 1; i < 5; i++) {
-            pacients.add(new Pacient());
-        }
-        return pacients;
-    }
-    private void fillPacients2() {
-        for (int i = 1; i < 31; i++) {
-            listP.add(fillPacients());
-        }
-    }
+
+
 
 
 }
